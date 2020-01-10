@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  Quiz Challenge
+
+  Created by Pedro Almeida on 10/01/20.
+  Copyright © 2020 Pedro Almeida. All rights reserved.
+*/
+
+"btn_reset_title" = "Reset";
+"btn_start_title" = "Start";
+
+"congratulations_alert_title" = "Congratulations";
+"congratulations_alert_message" = "Good job! You found all the answers on time. Keep up with the great work.";
+"congratulations_alert_action" = "Play Again";
+
+"you_lost_alert_title" = "Time finished";
+"you_lost_alert_message" = "Sorry, time is up! You got %d out of %d answers.";
+"you_lost_alert_action" = "Try Again";
+
+"not_started_alert_title" = "Wow!";
+"not_started_alert_message" = "Click on start button to begin the quiz.";
+"not_started_alert_action" = "Ok";
