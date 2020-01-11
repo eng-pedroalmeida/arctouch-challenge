@@ -8,9 +8,16 @@
 
 import UIKit
 
-class ViewController: BaseViewController {
+protocol QuizViewProtocol: class {
+    func setQuestion(question: String)
+    func showResult(won: Bool)
+    func updateTime(time: Double)
+    func updateScore()
+    func setState(running: Bool)
+}
 
-    private let kTimeValueInSeconds = 60.0
+class QuizViewController: BaseViewController {
+
     private let kButtonCornerRadius: CGFloat = 10.0
     private let kCellIdentifier = "DefaultCell"
     
@@ -28,8 +35,7 @@ class ViewController: BaseViewController {
     fileprivate let kCorrectKeywords = ["abstract","assert","boolean"]
     fileprivate let isLoading = false
     
-    private var timer: CountDownTimer?
-    fileprivate var correctAnswers: [String] = []
+    fileprivate lazy var viewModel: QuizViewModelProtocol = QuizViewModel(viewProtocol: self)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,28 +49,15 @@ class ViewController: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        setLoading(isLoading)
+        setLoading(true)
+        viewModel.getQuestion()
     }
     
     @IBAction func didTappedOnStartStop(_ sender: Any) {
-        if timer == nil {
-            timer = CountDownTimer(timeInSeconds: kTimeValueInSeconds, timeUpdated: { self.updateTime($0) }, timeFinished: {
-                self.updateTime(0.0)
-                self.finishQuiz()
-            })
-            timer?.start()
-            txfKeyword.becomeFirstResponder()
-            btnControl.setTitle(NSLocalizedString("btn_reset_title", comment: ""), for: .normal)
-        } else {
-            timer = nil
-            resetQuiz()
-        }
+        viewModel.toggleState()
     }
     
-    private func setupView() {
-        //Just for test
-        lblQuestion.text = "What are all the java keywords?"
-        
+    private func setupView() {        
         txfKeyword.backgroundColor = Colors.whiteSmoke
         txfKeyword.layer.masksToBounds = true
         txfKeyword.layer.cornerRadius = kButtonCornerRadius
@@ -77,7 +70,7 @@ class ViewController: BaseViewController {
         
         tableView.dataSource = self
         
-        updateTime(kTimeValueInSeconds)
+        updateTime(time: viewModel.totalTime)
         updateScore()
     }
     
@@ -86,50 +79,16 @@ class ViewController: BaseViewController {
         showLoading(loading)
     }
     
-    private func updateScore() {
-        lblAnswers.text = "\(getStringFromInt(correctAnswers.count))/\(getStringFromInt(kCorrectKeywords.count))"
-        if correctAnswers.count == kCorrectKeywords.count {
-            finishQuiz()
-        }
-    }
-    
-    private func updateTime(_ time: Double) {
-        let minutes = Int(time/60)
-        let seconds = Int(time.truncatingRemainder(dividingBy: 60.0))
-        
-        print("\(minutes):\(seconds)")
-        lblTime.text = "\(getStringFromInt(minutes)):\(getStringFromInt(seconds))"
-    }
-    
-    private func finishQuiz() {
-        showResult(kCorrectKeywords.count == correctAnswers.count)
-    }
-    
-    private func showResult(_ won: Bool) {
-        let title = NSLocalizedString(won ? "congratulations_alert_title" : "you_lost_alert_title", comment: "")
-        let message = String(format: NSLocalizedString(won ? "congratulations_alert_message" : "you_lost_alert_message", comment: ""), correctAnswers.count, kCorrectKeywords.count)
-        let actionTitle = NSLocalizedString(won ? "congratulations_alert_action" : "you_lost_alert_action", comment: "")
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: { action in
-            self.resetQuiz()
-        }))
-
-        self.present(alert, animated: true)
-    }
-    
-    private func resetQuiz() {
-        timer = nil
-        correctAnswers = []
+    private func reset() {
         tableView.reloadData()
         btnControl.setTitle(NSLocalizedString("btn_start_title", comment: ""), for: .normal)
         updateScore()
-        updateTime(kTimeValueInSeconds)
+        updateTime(time: viewModel.totalTime)
         txfKeyword.text = ""
         self.view.endEditing(true)
     }
     
-    func getStringFromInt(_ timeValue: Int) -> String {
+    fileprivate func getStringFromInt(_ timeValue: Int) -> String {
         let value = timeValue
         return value > 9 ? String(value) : "0\(value)"
     }
@@ -137,12 +96,7 @@ class ViewController: BaseViewController {
     @objc func textFieldDidChange(textField: UITextField) {
         print("text: \(textField.text ?? "")")
         let answer = textField.text ?? ""
-        if let _ = kCorrectKeywords.first(where: { $0 == answer }), !correctAnswers.contains(answer) {
-            self.correctAnswers.append(answer)
-            self.tableView.reloadData()
-            textField.text = ""
-            updateScore()
-        }
+        viewModel.validate(answer: answer)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -164,10 +118,54 @@ class ViewController: BaseViewController {
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension QuizViewController: QuizViewProtocol {
+    func setQuestion(question: String) {
+        setLoading(false)
+        lblQuestion.text = question
+    }
+    
+    func showResult(won: Bool) {
+        let title = NSLocalizedString(won ? "congratulations_alert_title" : "you_lost_alert_title", comment: "")
+        let message = String(format: NSLocalizedString(won ? "congratulations_alert_message" : "you_lost_alert_message", comment: ""), viewModel.userAnswers.count, kCorrectKeywords.count)
+        let actionTitle = NSLocalizedString(won ? "congratulations_alert_action" : "you_lost_alert_action", comment: "")
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: actionTitle, style: .default, handler: { action in
+            self.viewModel.reset()
+        }))
+
+        self.present(alert, animated: true)
+    }
+    
+    func updateTime(time: Double) {
+        let minutes = Int(time/60)
+        let seconds = Int(time.truncatingRemainder(dividingBy: 60.0))
+        
+        print("\(minutes):\(seconds)")
+        lblTime.text = "\(getStringFromInt(minutes)):\(getStringFromInt(seconds))"
+    }
+    
+    func updateScore() {
+        lblAnswers.text = "\(getStringFromInt(viewModel.userAnswers.count))/\(getStringFromInt(kCorrectKeywords.count))"
+        self.tableView.reloadData()
+        txfKeyword.text = ""
+    }
+    
+    func setState(running: Bool) {
+        if running {
+            btnControl.setTitle(NSLocalizedString("btn_reset_title", comment: ""), for: .normal)
+            txfKeyword.becomeFirstResponder()
+        } else {
+            reset()
+        }
+    }
+    
+}
+
+extension QuizViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return correctAnswers.count
+        return viewModel.userAnswers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -179,13 +177,13 @@ extension ViewController: UITableViewDataSource {
             cell.textLabel?.font = UIFont.systemFont(ofSize: 17.0)
         }
         
-        cell.textLabel?.text = (self.correctAnswers.reversed())[indexPath.row]
+        cell.textLabel?.text = (self.viewModel.userAnswers.reversed())[indexPath.row]
         
         return cell
     }
 }
 
-extension ViewController: UITextFieldDelegate {
+extension QuizViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
@@ -193,14 +191,14 @@ extension ViewController: UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == self.txfKeyword {
-            if timer == nil {
+            if btnControl.currentTitle == NSLocalizedString("btn_start_title", comment: "") {
                 let alert = UIAlertController(title: NSLocalizedString("not_started_alert_title", comment: ""), message: NSLocalizedString("not_started_alert_message", comment: ""), preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: NSLocalizedString("not_started_alert_action", comment: ""), style: .default, handler: nil))
 
                 self.present(alert, animated: true)
             }
             
-            return timer != nil
+            return btnControl.currentTitle == NSLocalizedString("btn_reset_title", comment: "")
         }
         
         return true

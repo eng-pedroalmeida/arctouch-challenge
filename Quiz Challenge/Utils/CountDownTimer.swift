@@ -43,11 +43,10 @@ class CountDownTimer {
             }
             
             strongSelf.time -= strongSelf.kInterval
+            strongSelf.timeUpdated(strongSelf.time)
             if strongSelf.time <= 0.0 {
                 strongSelf.timeFinished()
                 strongSelf.deinitTimer()
-            } else {
-                strongSelf.timeUpdated(strongSelf.time)
             }
         }
         
