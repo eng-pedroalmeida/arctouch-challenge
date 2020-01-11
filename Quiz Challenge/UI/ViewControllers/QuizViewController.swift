@@ -8,8 +8,8 @@
 
 import UIKit
 
-protocol QuizViewProtocol: class {
-    func setQuestion(question: String)
+protocol QuizViewProtocol: ViewProtocol {
+    func setQuiz(quiz: Quiz)
     func showResult(won: Bool)
     func updateTime(time: Double)
     func updateScore()
@@ -32,7 +32,6 @@ class QuizViewController: BaseViewController {
     @IBOutlet weak var tableView: UITableView!
     
     //Just for test
-    fileprivate let kCorrectKeywords = ["abstract","assert","boolean"]
     fileprivate let isLoading = false
     
     fileprivate lazy var viewModel: QuizViewModelProtocol = QuizViewModel(viewProtocol: self)
@@ -50,7 +49,7 @@ class QuizViewController: BaseViewController {
         super.viewDidAppear(animated)
         
         setLoading(true)
-        viewModel.getQuestion()
+        viewModel.getQuiz()
     }
     
     @IBAction func didTappedOnStartStop(_ sender: Any) {
@@ -119,14 +118,15 @@ class QuizViewController: BaseViewController {
 }
 
 extension QuizViewController: QuizViewProtocol {
-    func setQuestion(question: String) {
+    func setQuiz(quiz: Quiz) {
         setLoading(false)
-        lblQuestion.text = question
+        lblQuestion.text = quiz.question
+        updateScore()
     }
     
     func showResult(won: Bool) {
         let title = NSLocalizedString(won ? "congratulations_alert_title" : "you_lost_alert_title", comment: "")
-        let message = String(format: NSLocalizedString(won ? "congratulations_alert_message" : "you_lost_alert_message", comment: ""), viewModel.userAnswers.count, kCorrectKeywords.count)
+        let message = String(format: NSLocalizedString(won ? "congratulations_alert_message" : "you_lost_alert_message", comment: ""), viewModel.userAnswers.count, viewModel.answers.count)
         let actionTitle = NSLocalizedString(won ? "congratulations_alert_action" : "you_lost_alert_action", comment: "")
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -146,7 +146,7 @@ extension QuizViewController: QuizViewProtocol {
     }
     
     func updateScore() {
-        lblAnswers.text = "\(getStringFromInt(viewModel.userAnswers.count))/\(getStringFromInt(kCorrectKeywords.count))"
+        lblAnswers.text = "\(getStringFromInt(viewModel.userAnswers.count))/\(getStringFromInt(viewModel.answers.count))"
         self.tableView.reloadData()
         txfKeyword.text = ""
     }

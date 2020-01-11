@@ -14,7 +14,7 @@ protocol QuizViewModelProtocol: class {
     var userAnswers: [String] { get }
     
     init(viewProtocol: QuizViewProtocol)
-    func getQuestion()
+    func getQuiz()
     func toggleState()
     func validate(answer: String)
     func reset()
@@ -23,9 +23,12 @@ protocol QuizViewModelProtocol: class {
 class QuizViewModel: QuizViewModelProtocol {
 
     let totalTime = 60.0
-    
-    var answers: [String] = ["abstract","assert","boolean"]
+
+    var quiz: Quiz? = nil
     var userAnswers: [String] = []
+    var answers: [String] {
+        return quiz?.answer ?? []
+    }
     private let view: QuizViewProtocol
     private var timer: CountDownTimer?
     
@@ -33,8 +36,14 @@ class QuizViewModel: QuizViewModelProtocol {
         self.view = viewProtocol
     }
     
-    func getQuestion() {
-        view.setQuestion(question: "What are all the java keywords?")
+    func getQuiz() {
+        
+        QuizRepository().get(success: { quiz in
+            self.quiz = quiz
+            self.view.setQuiz(quiz: quiz)
+        }, error: { error in
+            self.view.showError(message: NSLocalizedString("default_error_message", comment: ""))
+        })
     }
     
     func toggleState() {

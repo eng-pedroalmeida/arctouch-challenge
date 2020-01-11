@@ -20,3 +20,8 @@
 "not_started_alert_title" = "Wow!";
 "not_started_alert_message" = "Click on start button to begin the quiz.";
 "not_started_alert_action" = "Ok";
+
+"error_alert_title" = "Error";
+"error_alert_action" = "Ok";
+
+"default_error_message" = "Sorry, an error occurred.";

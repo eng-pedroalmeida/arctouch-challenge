@@ -24,6 +24,12 @@
 		434F691323C9233200D07660 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434F691223C9233200D07660 /* BaseViewController.swift */; };
 		434F691523C924F700D07660 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 434F691423C924F600D07660 /* Localizable.strings */; };
 		EB148D4723C9D38F00727888 /* QuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D4623C9D38F00727888 /* QuizViewModel.swift */; };
+		EB148D5123C9EB6300727888 /* EasyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D4F23C9EB6300727888 /* EasyRequest.swift */; };
+		EB148D5423C9EECC00727888 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D5323C9EECC00727888 /* Quiz.swift */; };
+		EB148D5723C9F68C00727888 /* QuizAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D5623C9F68C00727888 /* QuizAPI.swift */; };
+		EB148D5923C9F6A900727888 /* QuizRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D5823C9F6A900727888 /* QuizRepository.swift */; };
+		EB148D5B23C9F75600727888 /* RepositoryConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D5A23C9F75500727888 /* RepositoryConstants.swift */; };
+		EB148D5D23C9F85100727888 /* APIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D5C23C9F85100727888 /* APIConfiguration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +73,12 @@
 		434F691223C9233200D07660 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		434F691423C924F600D07660 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		EB148D4623C9D38F00727888 /* QuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewModel.swift; sourceTree = "<group>"; };
+		EB148D4F23C9EB6300727888 /* EasyRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EasyRequest.swift; sourceTree = "<group>"; };
+		EB148D5323C9EECC00727888 /* Quiz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
+		EB148D5623C9F68C00727888 /* QuizAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizAPI.swift; sourceTree = "<group>"; };
+		EB148D5823C9F6A900727888 /* QuizRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizRepository.swift; sourceTree = "<group>"; };
+		EB148D5A23C9F75500727888 /* RepositoryConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryConstants.swift; sourceTree = "<group>"; };
+		EB148D5C23C9F85100727888 /* APIConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = APIConfiguration.swift; path = "Quiz Challenge/Utils/APIConfiguration.swift"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +131,8 @@
 			children = (
 				434F68D423C8BFC700D07660 /* AppDelegate.swift */,
 				434F68D623C8BFC700D07660 /* SceneDelegate.swift */,
+				EB148D5223C9EEB700727888 /* Models */,
+				EB148D5523C9F66800727888 /* Repository */,
 				434F691823C92DAA00D07660 /* Utils */,
 				434F690723C8E37400D07660 /* Extensions */,
 				EB148D4523C9D36E00727888 /* ViewModels */,
@@ -180,6 +194,7 @@
 		434F691823C92DAA00D07660 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				EB148D4D23C9EB6300727888 /* Networking */,
 				434F690C23C8FEBC00D07660 /* CountDownTimer.swift */,
 			);
 			path = Utils;
@@ -209,6 +224,49 @@
 				EB148D4623C9D38F00727888 /* QuizViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		EB148D4D23C9EB6300727888 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				EB148D4F23C9EB6300727888 /* EasyRequest.swift */,
+				EB148D5C23C9F85100727888 /* APIConfiguration.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		EB148D5223C9EEB700727888 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				EB148D5323C9EECC00727888 /* Quiz.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		EB148D5523C9F66800727888 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				EB148D5F23C9FA2200727888 /* Apis */,
+				EB148D5E23C9FA1A00727888 /* Clients */,
+				EB148D5823C9F6A900727888 /* QuizRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		EB148D5E23C9FA1A00727888 /* Clients */ = {
+			isa = PBXGroup;
+			children = (
+				EB148D5A23C9F75500727888 /* RepositoryConstants.swift */,
+			);
+			path = Clients;
+			sourceTree = "<group>";
+		};
+		EB148D5F23C9FA2200727888 /* Apis */ = {
+			isa = PBXGroup;
+			children = (
+				EB148D5623C9F68C00727888 /* QuizAPI.swift */,
+			);
+			path = Apis;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -344,13 +402,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB148D5723C9F68C00727888 /* QuizAPI.swift in Sources */,
 				434F68D923C8BFC700D07660 /* QuizViewController.swift in Sources */,
+				EB148D5B23C9F75600727888 /* RepositoryConstants.swift in Sources */,
+				EB148D5D23C9F85100727888 /* APIConfiguration.swift in Sources */,
 				434F691023C91A4800D07660 /* LoadingAlertController.swift in Sources */,
 				434F690D23C8FEBC00D07660 /* CountDownTimer.swift in Sources */,
 				EB148D4723C9D38F00727888 /* QuizViewModel.swift in Sources */,
 				434F690B23C8EC2C00D07660 /* UITextFieldExtension.swift in Sources */,
 				434F690623C8E28300D07660 /* Colors.swift in Sources */,
+				EB148D5123C9EB6300727888 /* EasyRequest.swift in Sources */,
+				EB148D5923C9F6A900727888 /* QuizRepository.swift in Sources */,
 				434F691323C9233200D07660 /* BaseViewController.swift in Sources */,
+				EB148D5423C9EECC00727888 /* Quiz.swift in Sources */,
 				434F690923C8E38300D07660 /* UIColorExtension.swift in Sources */,
 				434F68D523C8BFC700D07660 /* AppDelegate.swift in Sources */,
 				434F68D723C8BFC700D07660 /* SceneDelegate.swift in Sources */,
