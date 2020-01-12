@@ -52,6 +52,11 @@ class QuizViewController: BaseViewController {
         viewModel.getQuiz()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     @IBAction func didTappedOnStartStop(_ sender: Any) {
         viewModel.toggleState()
     }
@@ -93,16 +98,13 @@ class QuizViewController: BaseViewController {
     }
     
     @objc func textFieldDidChange(textField: UITextField) {
-        print("text: \(textField.text ?? "")")
         let answer = textField.text ?? ""
         viewModel.validate(answer: answer)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            print(viewControlBottomConstraint.constant)
             if viewControlBottomConstraint.constant == 0 {
-                print("Keyboard size: \(keyboardSize.height)")
                 viewControlBottomConstraint.constant = keyboardSize.height
                 viewControl.layoutIfNeeded()
             }

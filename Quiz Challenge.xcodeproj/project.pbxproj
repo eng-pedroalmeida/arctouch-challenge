@@ -30,6 +30,7 @@
 		EB148D5923C9F6A900727888 /* QuizRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D5823C9F6A900727888 /* QuizRepository.swift */; };
 		EB148D5B23C9F75600727888 /* RepositoryConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D5A23C9F75500727888 /* RepositoryConstants.swift */; };
 		EB148D5D23C9F85100727888 /* APIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D5C23C9F85100727888 /* APIConfiguration.swift */; };
+		EB148D6123CA546F00727888 /* QuizViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB148D6023CA546F00727888 /* QuizViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		EB148D5823C9F6A900727888 /* QuizRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizRepository.swift; sourceTree = "<group>"; };
 		EB148D5A23C9F75500727888 /* RepositoryConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryConstants.swift; sourceTree = "<group>"; };
 		EB148D5C23C9F85100727888 /* APIConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = APIConfiguration.swift; path = "Quiz Challenge/Utils/APIConfiguration.swift"; sourceTree = SOURCE_ROOT; };
+		EB148D6023CA546F00727888 /* QuizViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				434F68EB23C8BFCA00D07660 /* Quiz_ChallengeTests.swift */,
+				EB148D6023CA546F00727888 /* QuizViewModelTests.swift */,
 				434F68ED23C8BFCA00D07660 /* Info.plist */,
 			);
 			path = "Quiz ChallengeTests";
@@ -426,6 +429,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				434F68EC23C8BFCA00D07660 /* Quiz_ChallengeTests.swift in Sources */,
+				EB148D6123CA546F00727888 /* QuizViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

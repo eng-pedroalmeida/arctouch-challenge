@@ -6,7 +6,7 @@
 //  Copyright © 2020 Pedro Almeida. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol QuizViewModelProtocol: class {
     var totalTime: Double { get }
@@ -22,7 +22,7 @@ protocol QuizViewModelProtocol: class {
 
 class QuizViewModel: QuizViewModelProtocol {
 
-    let totalTime = 60.0
+    let totalTime = 300.0
 
     var quiz: Quiz? = nil
     var userAnswers: [String] = []
@@ -34,6 +34,13 @@ class QuizViewModel: QuizViewModelProtocol {
     
     required init(viewProtocol: QuizViewProtocol) {
         self.view = viewProtocol
+        
+        //Add did enter in background observer
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterInForeground), name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     func getQuiz() {
@@ -52,7 +59,6 @@ class QuizViewModel: QuizViewModelProtocol {
             timer?.start()
             view.setState(running: true)
         } else {
-            timer = nil
             reset()
         }
     }
@@ -66,6 +72,7 @@ class QuizViewModel: QuizViewModelProtocol {
     }
     
     func reset() {
+        timer = nil
         userAnswers = []
         view.setState(running: false)
     }
@@ -79,5 +86,9 @@ class QuizViewModel: QuizViewModelProtocol {
     
     private func didUserHitAllAnswers() -> Bool {
         return userAnswers.count == answers.count
+    }
+    
+    @objc func didEnterInForeground(notification: NSNotification) {
+        timer?.update()
     }
 }

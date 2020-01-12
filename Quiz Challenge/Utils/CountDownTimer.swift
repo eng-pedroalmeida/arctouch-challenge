@@ -13,18 +13,19 @@ class CountDownTimer {
     private var timer: Timer?
     private(set) var from: Date?
     
+    let totalTime: Double
     var time: Double
     let timeUpdated: (_ time: Double) -> Void
     let timeFinished: () -> Void
     
     init(timeInSeconds: Double, timeUpdated: @escaping (_ time: Double) -> Void, timeFinished: @escaping (() -> Void)) {
+        self.totalTime = timeInSeconds
         self.time = timeInSeconds
         self.timeUpdated = timeUpdated
         self.timeFinished = timeFinished
     }
     
     deinit {
-        print("Stopwatch successfully deinited")
         deinitTimer()
     }
     
@@ -34,6 +35,13 @@ class CountDownTimer {
         }
         
         return false
+    }
+    
+    func update() {
+        if let from = self.from, Date().timeIntervalSince1970 - from.timeIntervalSince1970 != time {
+            print("passed seconds: \(Date().timeIntervalSince1970 - from.timeIntervalSince1970)")
+            time = round(totalTime - (Date().timeIntervalSince1970 - from.timeIntervalSince1970))
+        }
     }
     
     func start() {
