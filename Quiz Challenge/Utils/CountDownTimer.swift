@@ -65,7 +65,7 @@ class CountDownTimer {
     }
     
     private func tick() {
-        timeUpdatedAction(time)
+        timeUpdatedAction(time >= 0 ? time : 0)
         if time <= 0.0 {
             timeFinishedAction()
             deinitTimer()

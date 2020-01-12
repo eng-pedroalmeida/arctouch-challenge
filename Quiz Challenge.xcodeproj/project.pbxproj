@@ -133,6 +133,7 @@
 			children = (
 				434F68D423C8BFC700D07660 /* AppDelegate.swift */,
 				434F68D623C8BFC700D07660 /* SceneDelegate.swift */,
+				EB148D6423CB486100727888 /* AppConstants.swift */,
 				EB148D5223C9EEB700727888 /* Models */,
 				EB148D5523C9F66800727888 /* Repository */,
 				EB148D4523C9D36E00727888 /* ViewModels */,
@@ -141,7 +142,6 @@
 				434F690723C8E37400D07660 /* Extensions */,
 				434F68E223C8BFCA00D07660 /* Info.plist */,
 				434F691423C924F600D07660 /* Localizable.strings */,
-				EB148D6423CB486100727888 /* AppConstants.swift */,
 			);
 			path = "Quiz Challenge";
 			sourceTree = "<group>";
