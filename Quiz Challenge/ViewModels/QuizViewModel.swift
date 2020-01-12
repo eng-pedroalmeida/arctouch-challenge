@@ -22,7 +22,7 @@ protocol QuizViewModelProtocol: class {
 
 class QuizViewModel: QuizViewModelProtocol {
 
-    let totalTime = 300.0
+    let totalTime = AppConstants.kQuizTime
 
     var quiz: Quiz? = nil
     var userAnswers: [String] = []
@@ -55,7 +55,7 @@ class QuizViewModel: QuizViewModelProtocol {
     
     func toggleState() {
         if timer == nil {
-            timer = CountDownTimer(timeInSeconds: totalTime, timeUpdated: { self.view.updateTime(time: $0) }, timeFinished: { self.checkResult() })
+            timer = CountDownTimer(time: totalTime, timeUpdatedAction: { self.view.updateTime(time: $0) }, timeFinishedAction: { self.view.showResult(won: false) })
             timer?.start()
             view.setState(running: true)
         } else {

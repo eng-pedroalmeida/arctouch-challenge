@@ -15,14 +15,14 @@ class CountDownTimer {
     
     let totalTime: Double
     var time: Double
-    let timeUpdated: (_ time: Double) -> Void
-    let timeFinished: () -> Void
+    let timeUpdatedAction: (_ time: Double) -> Void
+    let timeFinishedAction: () -> Void
     
-    init(timeInSeconds: Double, timeUpdated: @escaping (_ time: Double) -> Void, timeFinished: @escaping (() -> Void)) {
-        self.totalTime = timeInSeconds
-        self.time = timeInSeconds
-        self.timeUpdated = timeUpdated
-        self.timeFinished = timeFinished
+    init(time: Double, timeUpdatedAction: @escaping (_ time: Double) -> Void, timeFinishedAction: @escaping (() -> Void)) {
+        self.totalTime = time
+        self.time = time
+        self.timeUpdatedAction = timeUpdatedAction
+        self.timeFinishedAction = timeFinishedAction
     }
     
     deinit {
@@ -41,9 +41,10 @@ class CountDownTimer {
         if let from = self.from, Date().timeIntervalSince1970 - from.timeIntervalSince1970 != time {
             print("passed seconds: \(Date().timeIntervalSince1970 - from.timeIntervalSince1970)")
             time = round(totalTime - (Date().timeIntervalSince1970 - from.timeIntervalSince1970))
+            tick()
         }
     }
-    
+
     func start() {
         let action: (Timer) -> Void = { [weak self] timer in
             guard let strongSelf = self else {
@@ -51,11 +52,7 @@ class CountDownTimer {
             }
             
             strongSelf.time -= strongSelf.kInterval
-            strongSelf.timeUpdated(strongSelf.time)
-            if strongSelf.time <= 0.0 {
-                strongSelf.timeFinished()
-                strongSelf.deinitTimer()
-            }
+            strongSelf.tick()
         }
         
         from = Date()
@@ -67,9 +64,18 @@ class CountDownTimer {
         deinitTimer()
     }
     
+    private func tick() {
+        timeUpdatedAction(time)
+        if time <= 0.0 {
+            timeFinishedAction()
+            deinitTimer()
+        }
+    }
+    
     private func deinitTimer() {
         timer?.invalidate()
         timer = nil
+        time = totalTime
     }
     
 }

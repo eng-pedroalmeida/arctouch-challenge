@@ -33,6 +33,6 @@ enum QuizAPI: APIConfiguration {
     }
     
     var url: String {
-        return "\(RepositoryConstants.kBaseUrl)\(self.path)"
+        return "\(AppConstants.kBaseUrl)\(self.path)"
     }
 }
